@@ -1,0 +1,124 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Restaurant Search Results</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .search-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-container input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      width: 300px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-container button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .search-container button:hover {
+      background-color: #45a049;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Restaurant Search Results</h1>
+  
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Enter a search query">
+    <button id="searchButton">Search</button>
+  </div>
+
+  <table id="restaurantTable">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Restaurant Name</th>
+        <th>Address</th>
+        <th>Menu Items</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('#searchButton').click(function() {
+        var searchQuery = $('#searchInput').val();
+        
+        $.ajax({
+          url: 'http://127.0.0.1:8000/search/restaurant/',
+          data: { search_query: searchQuery },
+          dataType: 'json',
+          success: function(response) {
+            if (Array.isArray(response)) {
+              $('#restaurantTable tbody').empty();
+              
+              response.forEach(function(restaurant) {
+                var row = $('<tr>');
+                row.append('<td>' + restaurant.id + '</td>');
+                row.append('<td>' + restaurant.name + '</td>');
+                row.append('<td>' + restaurant.location + '</td>');
+                row.append('<td>' + restaurant.items + '</td>');
+                $('#restaurantTable tbody').append(row);
+              });
+            }
+          },
+          error: function(xhr, status, error) {
+            console.log('Error:', error);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
