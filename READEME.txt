@@ -1,6 +1,0 @@
-pip install -r requirements.txt
-
-django-admin credentials
-
-username: rohan
-password: 123
